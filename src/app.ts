@@ -8,29 +8,29 @@ app.use(express.json());
 
 app.listen(3000, () => {
   console.log('Server is running')
-})
+});
 
 app.post('/products', 
   ensureProductsNamesAreUnique, 
   createProduct
-)
+);
 
 app.get('/products',
   retrieveAllProducts
-)
+);
 
 app.get('/products/:id',
   ensureProductIdExists,
   retrieveProduct
-)
+);
 
 app.patch('/products/:id',
   ensureProductsNamesAreUnique,
   ensureProductIdExists,
   updateProduct
-)
+);
 
 app.delete('/products/:id',
   ensureProductIdExists,
   deleteProduct
-)
+);
