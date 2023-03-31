@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import market from './database';
-import { IProduct, IProductRequest } from "./interfaces";
+import { IFilteredProductRequest, IProduct, IProductRequest } from "./interfaces";
 
 const createProduct = (request: Request, response: Response): Response => {
   let number = market.length
@@ -9,7 +9,7 @@ const createProduct = (request: Request, response: Response): Response => {
   const total = productsRequest.reduce((acc, product) => acc + (product).price, 0 );
 
   const newProductsArray: Array<IProduct> = productsRequest.map(product => {
-    return {...product, id: ++number, expirationDate: dateIn365Days}
+    return {id: ++number,...product, expirationDate: dateIn365Days}
   })
   market.push(...newProductsArray);
 
@@ -32,12 +32,47 @@ const retrieveAllProducts = (request: Request, response: Response): Response => 
 const retrieveProduct = (request: Request, response: Response): Response => {
   const productIndex = response.locals.market.productIndex;
   const product = market[productIndex];
+  const teste = {
+    ...product,
+    expirationDate: product.expirationDate.toISOString(),
 
-  return response.status(200).json(product)
+  }
+
+  return response.status(200).json(teste)
+}
+
+const updateProduct = (request: Request, response: Response): Response => {
+  const productRequest = request.body;
+  const productIndex = Number(response.locals.market.productIndex);
+
+  for(const key in productRequest){
+    if(key === 'id' || key === 'expirationDate'){
+      delete productRequest[key]
+    }
+  }  
+  
+  market[productIndex] = {
+    ...market[productIndex],
+    ...productRequest
+  };
+  
+  return response.status(200).json(market[productIndex]);
+
+}
+
+const deleteProduct = (request: Request, response: Response): Response => {
+  // const id = Number(request.params.id);
+  const productIndex = Number(response.locals.market.productIndex);
+
+  market.splice(productIndex, 1);
+  return response.status(204).json();
+
 }
 
 export {
   createProduct,
   retrieveAllProducts,
-  retrieveProduct
+  retrieveProduct,
+  updateProduct,
+  deleteProduct
 }

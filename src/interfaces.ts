@@ -9,6 +9,14 @@ interface IFoodProduct extends IProduct {
   calories: number
 }
 
+interface IFilteredProductRequest{
+  name?: string,
+  price?: number,
+  weight?: number,
+  section?: "food" | "cleaning",
+  calories?: number
+}
+
 interface IProductRequest {
   name: string,
   price: number,
@@ -21,4 +29,4 @@ interface IPrice {
   price: number;
 }
 
-export { IProduct, ICleaningProduct, IFoodProduct, IProductRequest, IPrice}
+export { IProduct, ICleaningProduct, IFoodProduct, IProductRequest, IPrice, IFilteredProductRequest }

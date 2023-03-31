@@ -1,6 +1,6 @@
 import express, {Application, Request, Response} from 'express';
-import { createProduct, retrieveAllProducts, retrieveProduct } from './logics';
-import { ensureProductIdExists, ensureProductsNamesAreUnique } from './middlewares';
+import { createProduct, deleteProduct, retrieveAllProducts, retrieveProduct, updateProduct } from './logics';
+import { ensureProductsNamesAreUnique, ensureProductIdExists } from './middlewares';
 
 const app: Application = express();
 
@@ -22,4 +22,15 @@ app.get('/products',
 app.get('/products/:id',
   ensureProductIdExists,
   retrieveProduct
+)
+
+app.patch('/products/:id',
+  ensureProductsNamesAreUnique,
+  ensureProductIdExists,
+  updateProduct
+)
+
+app.delete('/products/:id',
+  ensureProductIdExists,
+  deleteProduct
 )
